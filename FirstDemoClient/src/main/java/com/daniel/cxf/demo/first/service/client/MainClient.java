@@ -1,12 +1,9 @@
 package com.daniel.cxf.demo.first.service.client;
 
-import org.apache.cxf.interceptor.LoggingInInterceptor;
-import org.apache.cxf.interceptor.LoggingOutInterceptor;
-import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
-import org.apache.cxf.phase.Phase;
+import java.util.List;
 
-import com.daniel.cxf.demo.first.service.cxf.HelloService;
-import com.daniel.cxf.demo.first.service.cxf.interceptors.MessageInterceptor;
+import com.daniel.cxf.demo.first.service.cxf.impl.Hellossss;
+
 
 /**
  * 发布webservice服务
@@ -18,20 +15,23 @@ import com.daniel.cxf.demo.first.service.cxf.interceptors.MessageInterceptor;
  */
 public class MainClient {
 	public static void main(String[] args) {
-		JaxWsProxyFactoryBean factory = new JaxWsProxyFactoryBean();
-		factory.setAddress("http://localhost:8080/HelloWorld");
-		factory.setServiceClass(HelloService.class);
-		
-	//	factory.getInInterceptors().add(new LoggingInInterceptor()); 可选
-	//	factory.getOutInterceptors().add(new LoggingOutInterceptor()); 可选
-		
-		factory.getInInterceptors().add(new MessageInterceptor(Phase.RECEIVE)); //自定义，recive只对输入有效
-		factory.getOutInterceptors().add(new MessageInterceptor(Phase.SEND));//自定义,send只对输出有效
-
-		
-		HelloService helloWorld = (HelloService) factory.create();
-		System.out.println(helloWorld.sayHi("zhuwei2"));
-		
+	//	simple();
+		mulity();
 	}
 
+	public static void simple() {
+		Hellossss factory = new Hellossss();//当做工厂使用
+		
+		com.daniel.cxf.demo.first.service.cxf.HelloService helloService = factory.getHelloServiceImplPort();//getXXXPort
+		
+		System.out.println(helloService.sayHi("nihao"));
+	}
+	
+	public static void mulity() {
+		HelloService_Service factory = new HelloService_Service();
+		com.daniel.cxf.demo.first.service.client.HelloService helloService = factory.getHelloServiceImplPort();
+		System.out.println(helloService.sayHi("mulity"));
+	//	List<Cat> cats = helloService.getCatsByUser(new User("DaiZhengmiao", "123456"));
+	//	System.out.println(cats);
+	}
 }
